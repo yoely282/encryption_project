@@ -10,15 +10,21 @@ with open("private_key.pem", "rb") as f:
 with open("encrypted_file.bin", "rb") as f:
     encrypted_data = f.read()
 
-# Decrypt the data
-decrypted_data = private_key.decrypt(
-    encrypted_data,
-    padding.OAEP(
-        mgf=padding.MGF1(algorithm=hashes.SHA256()),
-        algorithm=hashes.SHA256(),
-        label=None
+# Decrypt the data in chunks
+chunk_size = 256  # Adjust chunk size as needed to match the encryption
+decrypted_data = b''
+
+for i in range(0, len(encrypted_data), chunk_size):
+    chunk = encrypted_data[i:i+chunk_size]
+    decrypted_chunk = private_key.decrypt(
+        chunk,
+        padding.OAEP(
+            mgf=padding.MGF1(algorithm=hashes.SHA256()),
+            algorithm=hashes.SHA256(),
+            label=None
+        )
     )
-)
+    decrypted_data += decrypted_chunk
 
 # Save the decrypted data to a file
 with open("decrypted_file.txt", "wb") as f:
