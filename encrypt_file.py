@@ -10,7 +10,7 @@ with open("public_key.pem", "rb") as f:
 # Read the original file
 with open("original_file.txt", "rb") as f:
     original_data = f.read()
-
+                                                  
 # Encrypt the file data in chunks
 chunk_size = 190  # Adjust chunk size as needed to fit padding requirements
 encrypted_data = b''
